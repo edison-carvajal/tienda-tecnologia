@@ -39,7 +39,6 @@ public class RepositorioGarantiaPersistente implements RepositorioGarantiaExtend
 	public void agregar(GarantiaExtendida garantia) {
 		GarantiaExtendidaEntity garantiaEntity = buildGarantiaExtendidaEntity(garantia);
 		entityManager.persist(garantiaEntity);
-		
 	}
 	
 	@Override
@@ -60,8 +59,7 @@ public class RepositorioGarantiaPersistente implements RepositorioGarantiaExtend
 		return !resultList.isEmpty() ? (GarantiaExtendidaEntity) resultList.get(0) : null;
 	}
 
-	private GarantiaExtendidaEntity buildGarantiaExtendidaEntity(GarantiaExtendida garantia) {
-		// TEMP RADR ProductoEntity productoEntity = repositorioProductoJPA.obtenerProductoEntityPorCodigo(garantia.getProducto().getCodigo());
+	private GarantiaExtendidaEntity buildGarantiaExtendidaEntity(GarantiaExtendida garantia) {		
 		ProductoEntity productoEntity = repositorioProductoJPA.obtenerProductoEntityPorCodigo(garantia.getProducto().getCodigo());
 
 		GarantiaExtendidaEntity garantiaEntity = new GarantiaExtendidaEntity();

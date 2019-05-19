@@ -16,7 +16,6 @@ public class SistemaDePersistencia {
 		this.entityManager = new ConexionJPA().createEntityManager();
 	}
 
-	// TEMP RADR public RepositorioProducto obtenerRepositorioProductos() {
 	public RepositorioProductoPersistente obtenerRepositorioProductos() {
 		return new RepositorioProductoPersistente(entityManager);
 	}

@@ -6,7 +6,9 @@ import dominio.Producto;
 public class ProductoTestDataBuilder {
 
 	private static final String CODIGO= "F01TSA0150";
-	private static final String NOMBRE = "Computador Lenovo";
+	private static final String CODIGO2= "G01TSA0150";
+
+	private static final String NOMBRE = "Computador Lenovo 2";
 	private static final double PRECIO = 780000;
 	
 	private String codigo;

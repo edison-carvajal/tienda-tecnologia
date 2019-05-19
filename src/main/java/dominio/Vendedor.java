@@ -14,11 +14,12 @@ public class Vendedor {
 
     public static final String EL_PRODUCTO_TIENE_GARANTIA = "El producto ya cuenta con una garantia extendida";
     public static final String PRODUCTO_NO_CUENTA_CON_GARANTIA = "Este producto no cuenta con garantía extendida";
+    public static final String FALTA_COD_PRODUCTO_NOM_CLIENTE = "No se puede generar una garantia sin el codigo del producto o sin el nombre del cliente";
     
-    public static final double VALOR_GARANTIA_PORCENTAGE_PRODUCTO_COSTO_MAYOR_500000 = 20.0 ;
-    public static final double VALOR_GARANTIA_PORCENTAGE_PRODUCTO_COSTO_MENOR_IGUAL_500000 = 10.0 ;
+    public static final double VALOR_GARANTIA_PORCENTAGE_PRODUCTO_COSTO_MAYOR_CORTE = 20.0 ;
+    public static final double VALOR_GARANTIA_PORCENTAGE_PRODUCTO_COSTO_MENOR_IGUAL_CORTE = 10.0 ;
     
-    public static final double VALOR_PRODUCTO_LIMITE = 500000.0 ;
+    public static final double VALOR_PRODUCTO_CORTE = 500000.0 ;
     
     public static final int NUM_DIAS_GARANTIA_MAYOR = 200 ;
     public static final int NUM_DIAS_GARANTIA_MENOR = 100 ;
@@ -341,6 +342,10 @@ public class Vendedor {
 		Date fechaSolicitudGarantia = null ; 
 		double precioGarantia = 0.0 ;
 		
+		if ( (codigoProducto==null) || codigoProducto.isEmpty() ||  (nombreCliente==null) || nombreCliente.isEmpty()  ) {
+			throw new GarantiaExtendidaException(Vendedor.FALTA_COD_PRODUCTO_NOM_CLIENTE);
+		} 
+		
 		if ( repositorioProducto.codigoProductoTieneTresVocales(codigoProducto) ) {
 			throw new GarantiaExtendidaException(Vendedor.PRODUCTO_NO_CUENTA_CON_GARANTIA); 
 		}
@@ -359,14 +364,14 @@ public class Vendedor {
     		numDias = 0;
     	}
     	        
-    	if ( producto.getPrecio() > Vendedor.VALOR_PRODUCTO_LIMITE ) { 
+    	if ( producto.getPrecio() > Vendedor.VALOR_PRODUCTO_CORTE ) { 
     		diasDeGarantia = Vendedor.NUM_DIAS_GARANTIA_MAYOR ; 
-    		precioGarantia = producto.getPrecio() * ( Vendedor.VALOR_GARANTIA_PORCENTAGE_PRODUCTO_COSTO_MAYOR_500000 / 100.0 ) ;
+    		precioGarantia = producto.getPrecio() * ( Vendedor.VALOR_GARANTIA_PORCENTAGE_PRODUCTO_COSTO_MAYOR_CORTE / 100.0 ) ;
     		    		
     	}
     	else {
     		diasDeGarantia = Vendedor.NUM_DIAS_GARANTIA_MENOR ;
-    		precioGarantia = producto.getPrecio() * ( Vendedor.VALOR_GARANTIA_PORCENTAGE_PRODUCTO_COSTO_MENOR_IGUAL_500000 / 100.0 ) ;    		
+    		precioGarantia = producto.getPrecio() * ( Vendedor.VALOR_GARANTIA_PORCENTAGE_PRODUCTO_COSTO_MENOR_IGUAL_CORTE / 100.0 ) ;    		
     	}
     	
 		/* Invariante: 'numDias' es el numero de dias validos (sin contar los lunes) que han corrido de la garantia hasta 'diaActual' 
@@ -378,9 +383,10 @@ public class Vendedor {
 	    		numDias++;
 	    	}
 		}
-		/* El dia diaActual es el primer dia candidato a ser el dia de finalizacion de la garantia */
 
-		//diaActual.add(Calendar.DAY_OF_MONTH, 1);
+		diaActual.add(Calendar.DAY_OF_MONTH, 1);
+
+		/* El dia diaActual es el primer dia candidato a ser el dia de finalizacion de la garantia */
 		
         /* Vamos a buscar que el dia de finalizacion de la garantia no sea ni domingo ni festivo */
        
@@ -389,18 +395,12 @@ public class Vendedor {
         }
         /* diaActual es el dia de finalizacion de la garantia */
 
-        int diaDeSemana = diaActual.get( Calendar.DAY_OF_MONTH);
-		int mes =  diaActual.get( Calendar.MONTH);
-        int agno = diaActual.get( Calendar.YEAR);
+        // int diaDeSemana = diaActual.get( Calendar.DAY_OF_MONTH);
+        // int mes =  diaActual.get( Calendar.MONTH);
+        // int agno = diaActual.get( Calendar.YEAR);
        
-
         fechaFinGarantia = diaActual.getTime() ;
-       
-	    System.out.println("dia: " + diaDeSemana );
-	    System.out.println("mes: " + mes );
-	    System.out.println("agno: " + agno );
-	    System.out.println("precioGarantia: " + precioGarantia);
-		
+       		
 	    GarantiaExtendida garantiaExtendida = new GarantiaExtendida(producto, fechaSolicitudGarantia, fechaFinGarantia,
 	            precioGarantia, nombreCliente);
 		
