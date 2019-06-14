@@ -16,7 +16,7 @@ public class SistemaDePersistencia {
 		this.entityManager = new ConexionJPA().createEntityManager();
 	}
 
-	public RepositorioProductoPersistente obtenerRepositorioProductos() {
+	public RepositorioProducto obtenerRepositorioProductos() {
 		return new RepositorioProductoPersistente(entityManager);
 	}
 	

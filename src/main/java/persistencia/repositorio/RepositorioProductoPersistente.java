@@ -40,24 +40,7 @@ public class RepositorioProductoPersistente implements RepositorioProducto, Repo
 	public void agregar(Producto producto) {
 		entityManager.persist(ProductoBuilder.convertirAEntity(producto));
 	}	
+
 	
-	@Override
-	public boolean codigoProductoTieneTresVocales(String codigoProducto) {
-		int numVocales = 0 ;
-	   	String uppercodigoProducto = new String(codigoProducto);
-	   	
-	   	uppercodigoProducto = uppercodigoProducto.toUpperCase();
-	   	
-		for (int i=0; i<uppercodigoProducto.length() ; i++ ) {
-			
-			if ( (uppercodigoProducto.charAt(i)=='A') || (uppercodigoProducto.charAt(i)=='E') 
-				|| (uppercodigoProducto.charAt(i)=='I')  || (uppercodigoProducto.charAt(i)=='O')  
-				|| (uppercodigoProducto.charAt(i)=='U')  ) {
-				numVocales++ ;
-			}
-		}
-			
-		return ( numVocales >= 3 ) ;
-	}
 
 }

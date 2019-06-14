@@ -1,7 +1,6 @@
 package dominio.repositorio;
 
 import dominio.Producto;
-import dominio.excepcion.GarantiaExtendidaException;
 import dominio.GarantiaExtendida;
 
 public interface RepositorioGarantiaExtendida {
@@ -24,6 +23,5 @@ public interface RepositorioGarantiaExtendida {
 	 * @param codigo
 	 */
 	GarantiaExtendida obtener(String codigo);
-	
-	boolean tieneGarantia(String codigoProducto);
+
 }

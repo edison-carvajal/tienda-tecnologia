@@ -1,14 +1,9 @@
 package persistencia.repositorio;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import dominio.Producto;
-import dominio.Vendedor;
-import dominio.excepcion.GarantiaExtendidaException;
 import dominio.GarantiaExtendida;
 import dominio.repositorio.RepositorioProducto;
 import dominio.repositorio.RepositorioGarantiaExtendida;
@@ -24,21 +19,18 @@ public class RepositorioGarantiaPersistente implements RepositorioGarantiaExtend
 
 	private EntityManager entityManager;
 
-	RepositorioProductoJPA repositorioProductoJPA;
-	// RepositorioProductoPersistente repositorioProductoPersistente;
-	
-	
-    // 	public RepositorioGarantiaPersistente(EntityManager entityManager, RepositorioProductoPersistente repositorioProductoPersistente) {
-    public RepositorioGarantiaPersistente(EntityManager entityManager, RepositorioProducto repositorioProducto) {
+	private RepositorioProductoJPA repositorioProductoJPA;
+
+	public RepositorioGarantiaPersistente(EntityManager entityManager, RepositorioProducto repositorioProducto) {
 		this.entityManager = entityManager;
 		this.repositorioProductoJPA = (RepositorioProductoJPA) repositorioProducto;
-		//this.repositorioProductoPersistente = repositorioProductoPersistente;		
 	}
 
 	@Override
 	public void agregar(GarantiaExtendida garantia) {
 		GarantiaExtendidaEntity garantiaEntity = buildGarantiaExtendidaEntity(garantia);
 		entityManager.persist(garantiaEntity);
+		
 	}
 	
 	@Override
@@ -59,7 +51,8 @@ public class RepositorioGarantiaPersistente implements RepositorioGarantiaExtend
 		return !resultList.isEmpty() ? (GarantiaExtendidaEntity) resultList.get(0) : null;
 	}
 
-	private GarantiaExtendidaEntity buildGarantiaExtendidaEntity(GarantiaExtendida garantia) {		
+	private GarantiaExtendidaEntity buildGarantiaExtendidaEntity(GarantiaExtendida garantia) {
+
 		ProductoEntity productoEntity = repositorioProductoJPA.obtenerProductoEntityPorCodigo(garantia.getProducto().getCodigo());
 
 		GarantiaExtendidaEntity garantiaEntity = new GarantiaExtendidaEntity();
@@ -68,25 +61,19 @@ public class RepositorioGarantiaPersistente implements RepositorioGarantiaExtend
 
 		return garantiaEntity;
 	}
+
 	
 	@Override
 	public GarantiaExtendida obtener(String codigo) {
 		
 		GarantiaExtendidaEntity garantiaEntity = obtenerGarantiaEntityPorCodigo(codigo);
-		
-		if ( garantiaEntity==null ) {
-		   return null;	
-		}
 
 		return new GarantiaExtendida(ProductoBuilder.convertirADominio(garantiaEntity.getProducto()),
 				garantiaEntity.getFechaSolicitudGarantia(),garantiaEntity.getFechaFinGarantia(),garantiaEntity.getPrecio(),
 				garantiaEntity.getNombreCliente()
 				);
 	}
+
 	
-    public boolean tieneGarantia(String codigoProducto) {
-		GarantiaExtendida garantiaExtendida = obtener(codigoProducto);
-		
-    	return ( garantiaExtendida!=null );
-    }
+	
 }

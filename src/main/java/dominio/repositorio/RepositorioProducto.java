@@ -16,11 +16,5 @@ public interface RepositorioProducto {
 	 * @param producto
 	 */
 	void agregar(Producto producto);
-	
-	/**
-	 * Permite determinar si en la cadena 'codigoProducto' hay 3 o más ocurrencias de una o más vocales. 
-	 * @param producto
-	 */
-	boolean codigoProductoTieneTresVocales(String codigoProducto);
 
 }
