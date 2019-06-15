@@ -6,7 +6,19 @@ public class GarantiaExtendida {
 
     private Producto producto;
     private Date fechaSolicitudGarantia;
-    private Date fechaFinGarantia;
+    public void setFechaSolicitudGarantia(Date fechaSolicitudGarantia) {
+		this.fechaSolicitudGarantia = fechaSolicitudGarantia;
+	}
+
+	public void setFechaFinGarantia(Date fechaFinGarantia) {
+		this.fechaFinGarantia = fechaFinGarantia;
+	}
+
+	public void setPrecioGarantia(double precioGarantia) {
+		this.precioGarantia = precioGarantia;
+	}
+
+	private Date fechaFinGarantia;
     private double precioGarantia;
     private String nombreCliente;
 

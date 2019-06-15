@@ -2,6 +2,8 @@ package dominio;
 
 import dominio.repositorio.RepositorioProducto;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,12 +30,12 @@ public class Vendedor {
 	}
 
 	public void generarGarantia(String codigo, String nombreCliente) {
+
+		Producto producto;
 		
 		if(codigo == null || nombreCliente == null){
 			throw new GarantiaExtendidaException(DEBE_INGRESAR_EL_CODIGO_DE_PRODUCTO_Y_NOMBRE_CLIENTE);
 		}
-
-		Producto producto;
 
 		if (tieneGarantia(codigo)) {
 			throw new GarantiaExtendidaException(EL_PRODUCTO_TIENE_GARANTIA);
@@ -46,11 +48,44 @@ public class Vendedor {
 				throw new GarantiaExtendidaException(EL_PRODUCTO_NO_EXISTE);
 			} else {
 				GarantiaExtendida garantia = new GarantiaExtendida(producto);
+				calcularGarantia(garantia);
 				garantia.setNombreCliente(nombreCliente);
 				repositorioGarantia.agregar(garantia);
 			}
 		}
 
+	}
+
+	private void calcularGarantia(GarantiaExtendida garantia) {
+		double precioGarantia = 0;
+		int diasGarantia = 100;
+		double porcentajeGarantia = 0.1;
+		if(garantia !=null){
+			if(garantia.getProducto() != null){
+				if(garantia.getProducto().getPrecio()>500){
+					diasGarantia = 200;
+					porcentajeGarantia=0.2;
+				}
+				precioGarantia = garantia.getProducto().getPrecio() * porcentajeGarantia;
+			}
+			garantia.setFechaSolicitudGarantia(new Date());
+			garantia.setFechaFinGarantia(calcularFechaFinGarantia(diasGarantia,garantia.getFechaSolicitudGarantia()));
+			garantia.setPrecioGarantia(precioGarantia);
+		}
+	}
+
+	private Date calcularFechaFinGarantia(int diasGarantia, Date fechaSolicitudGarantia) {
+		Date fechaFinGarantia = (Date) fechaSolicitudGarantia.clone();
+		if(fechaSolicitudGarantia != null){
+			Calendar calendar = Calendar.getInstance(); 
+			calendar.setTime(fechaFinGarantia);
+			calendar.add(Calendar.DATE, diasGarantia);
+			if(calendar.get(Calendar.DAY_OF_WEEK)==7){
+				calendar.add(Calendar.DATE, 1);
+			}
+			fechaFinGarantia = calendar.getTime();
+		}
+		return fechaFinGarantia;
 	}
 
 	private boolean cuentaConGarantia(String codigo) {
