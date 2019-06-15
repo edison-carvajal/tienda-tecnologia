@@ -20,8 +20,8 @@ public class ProductoTestDataBuilder {
 		
 	}
 
-	public ProductoTestDataBuilder conCodigo(String cedula) {
-		this.codigo=cedula;
+	public ProductoTestDataBuilder conCodigo(String codigo) {
+		this.codigo=codigo;
 		return this;
 	}
 
